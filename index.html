@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Le Culte du Bot - Discord</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/jpeg" href="icon.jpg">
+    <script src="i18n.js"></script>
+
+    <style>
+        /* Configuration personnalisée */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f0f0f;
+            background-image: radial-gradient(circle at 50% 50%, #2a0a0a 0%, #050505 100%);
+            color: #e5e5e5;
+        }
+        h1, h2, h3 {
+            font-family: 'Cinzel', serif;
+        }
+        .cult-glow {
+            box-shadow: 0 0 20px rgba(220, 38, 38, 0.3);
+            transition: all 0.3s ease;
+        }
+        .cult-glow:hover {
+            box-shadow: 0 0 40px rgba(220, 38, 38, 0.6);
+            transform: translateY(-5px);
+            border-color: #ef4444;
+        }
+        .command-code {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
+            color: #fca5a5;
+        }
+        @keyframes pulseGlow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(220, 38, 38, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 35px rgba(220, 38, 38, 0.7);
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <nav class="p-6 flex justify-between items-center max-w-7xl mx-auto w-full">
+        <a href="index.html" class="text-2xl font-bold text-red-600 tracking-wider flex items-center gap-2 hover:opacity-80 transition"> 
+            <i class="fa-solid fa-crown"></i> <span data-i18n="nav.logo">CULT BOT</span>
+        </a> 
+        <div class="flex gap-6 text-sm font-semibold text-gray-400">
+            <a href="commands.html" class="hover:text-white transition" data-i18n="nav.rituals">Rituels</a> 
+            <a href="leaderboard.html" class="hover:text-white transition" data-i18n="nav.pantheon">Panthéon</a>
+            <a href="updates.html" class="hover:text-white transition" data-i18n="nav.revelations">Révélations</a>
+        </div>
+        <div class="flex gap-4">
+            <button id="language-toggle" onclick="toggleLanguage()" class="bg-red-900/50 hover:bg-red-700 text-white px-4 py-2 rounded-full font-bold transition duration-300 border border-red-700">
+                🇫🇷 FR
+            </button>
+            <a href="https://discord.com/oauth2/authorize?client_id=1361740370605641840&permissions=8&redirect_uri=http%3A%2F%2Flocalhost&integration_type=0&scope=bot+applications.commands" class="bg-red-700 hover:bg-red-600 text-white px-6 py-2 rounded-full font-bold transition duration-300 shadow-lg shadow-red-900/50" data-i18n="nav.invite">
+                Inviter le Bot
+            </a>
+        </div>
+    </nav>
+
+    <header class="flex flex-col items-center text-center mt-10 mb-20 px-4">
+        <div class="w-40 h-40 md:w-56 md:h-56 rounded-full border-4 border-red-800 overflow-hidden mb-6 relative" style="animation: pulseGlow 4s infinite ease-in-out;">
+            <img src="icon.jpg" alt="Cult of the Lamb Bot" class="w-full h-full object-cover">
+        </div>
+        
+        <h1 class="text-5xl md:text-7xl font-black text-white mb-4 tracking-tighter drop-shadow-lg">
+            <span data-i18n="index.title">Rejoins le CULTE</span>
+        </h1>
+        <p class="text-gray-400 text-lg md:text-xl max-w-2xl mb-8" data-i18n="index.subtitle">
+            Gère tes fidèles, diffuse la musique sacrée et maintiens l'ordre dans ton serveur avec le pouvoir de l'Agneau.
+        </p>
+        <div class="flex gap-4">
+            <a href="commands.html" class="border border-red-600 text-red-500 hover:bg-red-600 hover:text-white px-8 py-3 rounded-lg font-bold transition duration-300" data-i18n="index.see_rituals"> 
+                Voir les rituels
+            </a>
+        </div>
+    </header>
+
+    <section class="max-w-7xl mx-auto px-4 -mt-10 mb-20">
+        <div class="flex flex-wrap justify-center gap-4 md:gap-8 text-center">
+            <div class="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800 rounded-xl px-8 py-4">
+                <p id="stats-guilds" class="text-3xl font-bold text-white">--</p>
+                <p class="text-sm text-gray-400" data-i18n="index.active_cults">Cultes Actifs</p>
+            </div>
+            <div class="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800 rounded-xl px-8 py-4">
+                <p id="stats-members" class="text-3xl font-bold text-white">--</p>
+                <p class="text-sm text-gray-400" data-i18n="index.devoted_faithful">Fidèles Dévoués</p>
+            </div>
+        </div>
+        <div class="text-center mt-3">
+            <p id="stats-updated" class="text-xs text-gray-500" data-i18n="index.last_update">Dernière mise à jour :</p>
+            <p id="stats-error" class="text-sm text-red-400 mt-1 hidden" data-i18n="index.stats_unavailable">Statistiques indisponibles pour le moment.</p>
+        </div>
+    </section>
+
+    <section id="commands" class="max-w-7xl mx-auto px-4 pb-20">
+        <h2 class="text-4xl text-center mb-12 text-red-500 border-b-2 border-red-900/30 pb-4 inline-block w-full">
+            <i class="fa-solid fa-book-skull mr-2"></i> <span data-i18n="index.grimoire_commands">Grimoire des Commandes</span>
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            <a href="commands.html#musique" class="block bg-neutral-900 border border-neutral-800 rounded-xl p-6 cult-glow relative overflow-hidden"> 
+                <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl text-red-600"><i class="fa-solid fa-music"></i></div>
+                <h3 class="text-2xl text-red-500 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-music"></i> Musique
+                </h3>
+                <ul class="space-y-3 text-sm text-gray-300">
+                    <li class="flex flex-col"><span class="command-code px-2 py-1 rounded w-fit mb-1 font-mono">/play [url]</span> <span class="text-gray-500">Joue une musique sacrée</span></li>
+                    <li class="flex flex-col"><span class="command-code px-2 py-1 rounded w-fit mb-1 font-mono">/skip</span> <span class="text-gray-500">Passe à l'hymne suivant</span></li>
+                    <li class="flex flex-col"><span class="command-code px-2 py-1 rounded w-fit mb-1 font-mono">/queue</span> <span class="text-gray-500">Affiche la file d’attente</span></li>
+                    <li class="flex flex-col"><span class="command-code px-2 py-1 rounded w-fit mb-1 font-mono">... et plus</span> <span class="text-gray-500">Voir toutes les commandes</span></li>
+                </ul>
+            </a>
+
+            <a href="commands.html#fun" class="block bg-neutral-900 border border-neutral-800 rounded-xl p-6 cult-glow relative overflow-hidden"> 
+                <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl text-purple-600"><i class="fa-solid fa-icons"></i></div>
+                <h3 class="text-2xl text-purple-400 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-face-grin-tongue-wink"></i> Fun & Interactions
+                </h3>
+                <ul class="space-y-3 text-sm text-gray-300">
+                    <li class="flex flex-col"><span class="command-code px-2 py-1 rounded w-fit mb-1 font-mono">/hug @user</span> <span class="text-gray-500">Donne de l'affection</span></li>
+                    <li class="flex flex-col"><span class="command-code px-2 py-1 rounded w-fit mb-1 font-mono">/blague</span> <span class="text-gray-500">Une blague pour les fidèles</span></li>
+                    <li class="flex flex-col"><span class="command-code px-2 py-1 rounded w-fit mb-1 font-mono">/8ball [?]</span> <span class="text-gray-500">Consulte l'oracle</span></li>
+                    <li class="flex flex-col"><span class="command-code px-2 py-1 rounded w-fit mb-1 font-mono">... et plus</span> <span class="text-gray-500">Voir toutes les commandes</span></li>
+                </ul>
+            </a>
+
+            <a href="commands.html#moderateur" class="block bg-neutral-900 border border-neutral-800 rounded-xl p-6 cult-glow relative overflow-hidden"> 
+                <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl text-blue-600"><i class="fa-solid fa-gavel"></i></div>
+                <h3 class="text-2xl text-blue-500 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved"></i> Modérateur
+                </h3>
+                <ul class="space-y-3 text-sm text-gray-300">
+                    <li class="flex flex-col"><span class="command-code px-2 py-1 rounded w-fit mb-1 font-mono">/clear [nb]</span> <span class="text-gray-500">Supprime des messages</span><span class="text-gray-600 text-xs">Perm: Gérer les messages</span></li>
+                    <li class="flex flex-col"><span class="command-code px-2 py-1 rounded w-fit mb-1 font-mono">/ban @user</span> <span class="text-gray-500">Banni un membre</span><span class="text-gray-600 text-xs">Perm: Bannir des membres</span></li>
+                    <li class="flex flex-col"><span class="command-code px-2 py-1 rounded w-fit mb-1 font-mono">/kick @user</span> <span class="text-gray-500">Expulse un membre</span><span class="text-gray-600 text-xs">Perm: Expulser des membres</span></li>
+                    <li class="flex flex-col"><span class="command-code px-2 py-1 rounded w-fit mb-1 font-mono">/toggle_moderation</span> <span class="text-gray-500">Active/désactive la modération du bot</span><span class="text-gray-600 text-xs">Perm: Administrateur</span></li>
+                    <li class="flex flex-col"><span class="command-code px-2 py-1 rounded w-fit mb-1 font-mono">/help_mp</span> <span class="text-gray-500">Liste des commandes en MP</span><span class="text-gray-600 text-xs">Perm: Aucune</span></li>
+                    <li class="flex flex-col"><span class="command-code px-2 py-1 rounded w-fit mb-1 font-mono">... et plus</span> <span class="text-gray-500">Voir toutes les commandes</span></li>
+                </ul>
+            </a>
+
+            <a href="commands.html#gestion" class="block bg-neutral-900 border border-neutral-800 rounded-xl p-6 cult-glow relative overflow-hidden"> 
+                <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl text-green-600"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+                <h3 class="text-2xl text-green-500 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-gear"></i> Gestion
+                </h3>
+                <ul class="space-y-3 text-sm text-gray-300">
+                    <li class="flex flex-col"><span class="command-code px-2 py-1 rounded w-fit mb-1 font-mono">/setrolecolor</span> <span class="text-gray-500">Change la couleur d'un rôle</span></li>
+                    <li class="flex flex-col"><span class="command-code px-2 py-1 rounded w-fit mb-1 font-mono">/createrolecolors</span> <span class="text-gray-500">Crée des rôles chromatiques</span></li>
+                </ul>
+            </a>
+
+             <a href="commands.html#xp" class="block bg-neutral-900 border border-neutral-800 rounded-xl p-6 cult-glow relative overflow-hidden md:col-span-2 lg:col-span-1"> 
+                <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl text-yellow-600"><i class="fa-solid fa-star"></i></div>
+                <h3 class="text-2xl text-yellow-500 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-chart-line"></i> Système XP
+                </h3>
+                <ul class="space-y-3 text-sm text-gray-300">
+                    <li class="flex flex-col"><span class="command-code px-2 py-1 rounded w-fit mb-1 font-mono">/xp [membre]</span> <span class="text-gray-500">Affiche la dévotion (Niveau)</span></li>
+                    <li class="flex flex-col"><span class="command-code px-2 py-1 rounded w-fit mb-1 font-mono">/top</span> <span class="text-gray-500">Classement des plus fidèles</span></li>
+                    <li class="flex flex-col"><span class="command-code px-2 py-1 rounded w-fit mb-1 font-mono">/menuxp</span> <span class="text-gray-500">Configure les paliers (Admin)</span></li>
+                </ul>
+            </a>
+
+            <a href="commands.html#streaming" class="block bg-neutral-900 border border-neutral-800 rounded-xl p-6 cult-glow relative overflow-hidden"> 
+                <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl text-orange-600"><i class="fa-brands fa-twitch"></i></div> 
+                <h3 class="text-2xl text-orange-500 mb-4 flex items-center gap-2"> 
+                    <i class="fa-brands fa-twitch"></i> Streaming 
+                </h3> 
+                <ul class="space-y-3 text-sm text-gray-300"> 
+                    <li class="flex flex-col"><span class="command-code px-2 py-1 rounded w-fit mb-1 font-mono">/live</span> <span class="text-gray-500">Affiche le statut Twitch</span></li> 
+                    <li class="flex flex-col"><span class="command-code px-2 py-1 rounded w-fit mb-1 font-mono">... et plus</span> <span class="text-gray-500">Voir toutes les commandes</span></li> 
+                </ul> 
+            </a> 
+
+        </div>
+    </section>
+
+    <footer class="mt-auto py-8 bg-black text-center text-gray-600 border-t border-red-900/20">
+        <p data-i18n="index.creator">Créé par le Spunnn © 2025</p>
+        <div class="mt-2 text-2xl flex justify-center gap-4"> 
+            <a href="https://discord.gg/ganEwXH3zg" class="hover:text-red-500 transition"><i class="fa-brands fa-discord"></i></a> 
+            <a href="https://github.com/cnuddeMatteo" class="hover:text-red-500 transition"><i class="fa-brands fa-github"></i></a> 
+        </div>
+    </footer>
+
+    <script>
+        async function fetchStats() {
+            try {
+                const response = await fetch('stats.json?v=' + new Date().getTime());
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                const stats = await response.json();
+
+                document.getElementById('stats-guilds').textContent = (stats.guilds ?? 'N/A');
+                document.getElementById('stats-members').textContent = (stats.members ?? 'N/A');
+
+                const errEl = document.getElementById('stats-error');
+                if (errEl) { errEl.textContent = ''; errEl.classList.add('hidden'); }
+                const updatedEl = document.getElementById('stats-updated');
+                if (updatedEl) updatedEl.textContent = 'Dernière mise à jour : ' + new Date().toLocaleTimeString();
+            } catch (error) {
+                console.error("Impossible de charger les statistiques depuis stats.json:", error);
+                document.getElementById('stats-guilds').textContent = 'N/A';
+                document.getElementById('stats-members').textContent = 'N/A';
+
+                const errEl = document.getElementById('stats-error');
+                if (errEl) { errEl.textContent = 'Statistiques indisponibles pour le moment.'; errEl.classList.remove('hidden'); }
+                const updatedEl = document.getElementById('stats-updated');
+                if (updatedEl) updatedEl.textContent = 'Dernière tentative : ' + new Date().toLocaleTimeString();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // fetch initial
+            fetchStats();
+            // Poll toutes les 60 secondes pour tests / affichage en direct
+            setInterval(fetchStats, 60 * 1000);
+        });
+    </script>
+
+</body>
+</html>

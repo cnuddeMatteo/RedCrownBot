@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Le Panthéon - Classement</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/jpeg" href="icon.jpg">
+    <script src="i18n.js"></script>
+    
+    <style>
+        /* Styles Globaux copiés de index.html pour cohérence */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #0f0f0f; /* Fond plus sombre */
+            background-image: radial-gradient(circle at 50% 50%, #2a0a0a 0%, #050505 100%); /* Dégradé radial */
+            background-attachment: fixed;
+            color: #e5e5e5; 
+        }
+        .cult-font { font-family: 'Cinzel', serif; }
+
+        /* Navigation */
+        nav {
+            background-color: rgba(0, 0, 0, 0.7); /* Rendre la nav plus cohérente avec index.html */
+            border-bottom: 2px solid rgba(220, 38, 38, 0.2);
+            backdrop-filter: blur(5px);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        /* --- Style Top 3 (Podium) --- */
+        .rank-card {
+            background: rgba(15, 15, 15, 0.9);
+            border: 2px solid rgba(220, 38, 38, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        .rank-card:hover {
+            border-color: rgba(220, 38, 38, 0.6);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(220, 38, 38, 0.2);
+        }
+        
+        /* 🥇 GOLD (Rank 1) 🥇 */
+        .gold-glow { 
+            box-shadow: 0 0 40px rgba(234, 179, 8, 0.5), 0 0 80px rgba(220, 38, 38, 0.2);
+            border-color: #ca8a04 !important;
+            background: linear-gradient(180deg, rgba(30, 20, 10, 0.9) 0%, rgba(15, 10, 5, 0.9) 100%) !important;
+        }
+        .gold-glow:hover {
+            box-shadow: 0 0 60px rgba(234, 179, 8, 0.8), 0 0 100px rgba(220, 38, 38, 0.3);
+        }
+        
+        /* --- Reste du classement (4+) --- */
+        .leaderboard-item {
+            background: rgba(15, 15, 15, 0.8);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        .leaderboard-item:hover {
+            background: rgba(30, 15, 15, 0.9);
+            border-color: rgba(220, 38, 38, 0.5);
+            transform: translateX(5px);
+            box-shadow: inset 0 0 15px rgba(220, 38, 38, 0.1);
+        }
+        
+        /* Rang numéro */
+        .rank-number {
+            font-weight: 900;
+            text-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
+            min-width: 30px; /* Assure un alignement pour les rangs à 2 ou 3 chiffres */
+            text-align: right;
+        }
+        
+        /* Headers */
+        h1 {
+            text-shadow: 0 0 20px rgba(220, 38, 38, 0.5), 0 0 40px rgba(220, 38, 38, 0.2);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <nav class="p-4 flex justify-between items-center w-full">
+        <a href="index.html" class="text-2xl font-bold text-red-600 tracking-wider flex items-center gap-2 hover:opacity-80 transition"> 
+            <i class="fa-solid fa-crown"></i> <span data-i18n="nav.logo">CULT BOT</span>
+        </a>
+        <div class="flex gap-6 text-sm font-semibold text-gray-400">
+            <a href="commands.html" class="hover:text-white transition" data-i18n="nav.rituals">Rituels</a> 
+            <a href="leaderboard.html" class="hover:text-white transition font-bold text-red-600" data-i18n="nav.pantheon">Panthéon</a>
+            <a href="updates.html" class="hover:text-white transition" data-i18n="nav.revelations">Révélations</a>
+        </div>
+        <div class="flex gap-4">
+            <button id="language-toggle" onclick="toggleLanguage()" class="bg-red-900/50 hover:bg-red-700 text-white px-4 py-2 rounded-full font-bold transition duration-300 border border-red-700">
+                🇫🇷 FR
+            </button>
+            <a href="https://discord.com/oauth2/authorize?client_id=1361740370605641840&permissions=8&response_type=code&redirect_uri=http%3A%2F%2Flocalhost&integration_type=0&scope=bot+applications.commands+dm_channels.read+activities.read" class="bg-red-700 hover:bg-red-600 text-white px-6 py-2 rounded-full font-bold transition duration-300 shadow-lg shadow-red-900/50" data-i18n="nav.invite">
+                Inviter le Bot
+            </a>
+        </div>
+    </nav>
+
+    <div class="px-4 mt-8 pb-20 w-full">
+        <div class="text-center mb-16">
+            <div style="height: 60px; display: flex; align-items: center; justify-content: center;">
+                <i class="fa-solid fa-crown text-4xl text-yellow-500" style="text-shadow: 0 0 20px rgba(234, 179, 8, 0.5);"></i>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-black cult-font mb-2 text-white" style="text-shadow: 0 0 20px rgba(220, 38, 38, 0.5), 0 0 40px rgba(220, 38, 38, 0.2);"><span class="text-red-600" data-i18n="leaderboard.pantheon">PANTHÉON</span> <span class="text-red-600" data-i18n="leaderboard.devoted_faithful">DES FIDÈLES</span></h1>
+            <p class="text-gray-400 text-lg" data-i18n="leaderboard.who_devoted">✨ Qui sont les plus dévoués au culte ? ✨</p>
+        </div>
+
+        <div id="top3-container" class="flex flex-col md:flex-row justify-center items-end gap-4 md:gap-6 mb-16 min-h-96">
+            <p class="text-gray-400 text-center" id="loading-message" data-i18n="leaderboard.loading">Chargement du Panthéon...</p>
+        </div>
+
+        <!-- Barre de recherche -->
+        <div class="mb-12 flex justify-center">
+            <div class="w-full md:w-96">
+                <input 
+                    type="text" 
+                    id="search-input" 
+                    data-i18n="leaderboard.search_placeholder"
+                    placeholder="🔍 Rechercher par pseudo ou ID..." 
+                    class="w-full px-4 py-3 rounded-lg bg-gray-900 border border-red-600/50 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/30 transition"
+                >
+            </div>
+        </div>
+
+        <div id="remaining-leaderboard" class="space-y-2">
+        </div>
+
+    </div>
+
+    <script> 
+        // L'API est sur le port 5000, la page web sur le port 8000 
+        // On doit utiliser l'URL complète avec le domaine explicite
+        const API_URL = 'http://localhost:5000/api/leaderboard'; 
+        
+        // CORS est configuré sur le serveur Flask pour permettre les requêtes cross-origin
+        
+        let fullLeaderboard = []; // Stocke le classement complet
+
+        // Fonction pour formater les nombres
+        function formatNumber(num) {
+            return num.toLocaleString('fr-FR');
+        }
+
+        // Fonction pour charger et afficher le leaderboard
+        async function loadLeaderboard() {
+            const top3Container = document.getElementById('top3-container');
+            const remainingContainer = document.getElementById('remaining-leaderboard');
+            const loadingMessage = document.getElementById('loading-message');
+
+            if (loadingMessage) loadingMessage.textContent = 'Chargement du Panthéon...';
+            top3Container.innerHTML = '';
+            remainingContainer.innerHTML = '';
+
+            try {
+                console.log('Tentative de fetch depuis:', API_URL);
+                const response = await fetch(API_URL);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: Impossible d'accéder aux données`);
+                }
+                
+                const leaderboard = await response.json();
+                console.log('Données reçues:', leaderboard);
+                
+                fullLeaderboard = leaderboard; // Stocke le classement complet
+
+                if (!leaderboard || leaderboard.length === 0) {
+                    const emptyPantheon = getTranslation('leaderboard.empty_pantheon');
+                    top3Container.innerHTML = `<p class="text-gray-400">${emptyPantheon}</p>`;
+                    return;
+                }
+
+                // Sépare le top 3 du reste
+                const top3 = leaderboard.slice(0, 3);
+                const remaining = leaderboard.slice(3, 50); // Affiche jusqu'au rang 50
+
+                // Affiche le top 3
+                displayTop3(top3);
+
+                // Affiche le reste du classement (jusqu'au 50)
+                displayRemaining(remaining);
+
+            } catch (error) {
+                console.error('Erreur complète:', error);
+                const errorMsg = getTranslation('leaderboard.error_loading');
+                top3Container.innerHTML = `<p class="text-red-400 text-center w-full">${errorMsg} (${error.message})</p>`;
+                remainingContainer.innerHTML = '';
+            }
+        }
+
+        function displayTop3(top3) {
+            const container = document.getElementById('top3-container');
+            container.innerHTML = '';
+            
+            // Ordre d'affichage : 2, 1, 3 (pour l'effet visuel du podium)
+            // rank 2 (index 1), rank 1 (index 0), rank 3 (index 2)
+            const displayOrder = [1, 0, 2]; 
+
+            displayOrder.forEach((idx, displayIdx) => {
+                if (idx >= top3.length) return;
+
+                const user = top3[idx];
+                const position = idx + 1;
+                
+                let html = '';
+                
+                if (position === 1) {
+                    // Champion (au centre, plus grand, avec lueur Or/Rouge)
+                    html = `
+                        <div class="rank-card gold-glow p-6 rounded-xl w-full md:w-[35%] h-64 flex flex-col items-center justify-center relative z-10 order-${displayIdx + 1} mb-8 md:mb-0">
+                            <div class="absolute -top-10 w-20 h-20 bg-yellow-500 rounded-full flex items-center justify-center text-black font-bold text-3xl border-4 border-yellow-700 shadow-lg" style="box-shadow: 0 0 20px rgba(234, 179, 8, 0.9);"><i class="fa-solid fa-crown"></i></div>
+                            <div class="w-24 h-24 rounded-full bg-yellow-900 mb-4 border-4 border-yellow-600 overflow-hidden shadow-2xl">
+                                <img src="${user.avatar_url}" alt="avatar" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'" class="w-full h-full object-cover">
+                            </div>
+                            <h3 class="font-black text-2xl text-yellow-400 truncate max-w-[150px]">${user.username}</h3>
+                            <span class="text-yellow-200/90 font-bold">Niveau ${user.level}</span>
+                            <span class="text-yellow-600 text-sm mt-1">${formatNumber(user.xp)} XP</span>
+                        </div>
+                    `;
+                } else if (position === 2) {
+                    // Deuxième (à gauche, hauteur moyenne)
+                    html = `
+                        <div class="rank-card p-6 rounded-xl w-full md:w-[30%] h-48 flex flex-col items-center justify-center relative order-${displayIdx + 1}">
+                            <div class="absolute -top-7 w-14 h-14 bg-gray-300 rounded-full flex items-center justify-center text-black font-bold text-2xl border-4 border-gray-500 shadow-lg">2</div>
+                            <div class="w-16 h-16 rounded-full bg-gray-700 mb-3 border-2 border-gray-500 overflow-hidden">
+                                <img src="${user.avatar_url}" alt="avatar" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'" class="w-full h-full object-cover">
+                            </div>
+                            <h3 class="font-bold text-lg truncate max-w-[150px] text-gray-200">${user.username}</h3>
+                            <span class="text-gray-400 text-sm">Niveau ${user.level}</span>
+                            <span class="text-gray-500 text-xs mt-1">${formatNumber(user.xp)} XP</span>
+                        </div>
+                    `;
+                } else if (position === 3) {
+                    // Troisième (à droite, la plus courte)
+                    html = `
+                        <div class="rank-card p-6 rounded-xl w-full md:w-[30%] h-40 flex flex-col items-center justify-center relative order-${displayIdx + 1}">
+                            <div class="absolute -top-6 w-12 h-12 bg-orange-700 rounded-full flex items-center justify-center text-white font-bold text-xl border-4 border-orange-900 shadow-lg">3</div>
+                            <div class="w-14 h-14 rounded-full bg-gray-700 mb-3 border-2 border-orange-800 overflow-hidden">
+                                <img src="${user.avatar_url}" alt="avatar" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'" class="w-full h-full object-cover">
+                            </div>
+                            <h3 class="font-bold text-lg truncate max-w-[150px] text-gray-200">${user.username}</h3>
+                            <span class="text-gray-400 text-sm">Niveau ${user.level}</span>
+                            <span class="text-gray-500 text-xs mt-1">${formatNumber(user.xp)} XP</span>
+                        </div>
+                    `;
+                }
+                
+                container.innerHTML += html;
+            });
+        }
+
+        function displayRemaining(remaining) {
+            const container = document.getElementById('remaining-leaderboard');
+            
+            if (remaining.length === 0) {
+                 const emptyMsg = getTranslation('leaderboard.no_top50');
+                 container.innerHTML = `<div class="p-4 text-center text-gray-500">${emptyMsg}</div>`;
+                 return;
+            }
+
+            remaining.forEach((user, index) => {
+                // Le rang réel est 4 + index dans le tableau 'remaining'
+                const rank = 4 + index; 
+                
+                const html = `
+                    <div class="leaderboard-item p-4 rounded-lg flex items-center justify-between transition" data-username="${user.username.toLowerCase()}" data-user-id="${user.user_id}">
+                        <div class="flex items-center gap-4">
+                            <span class="text-red-500 font-mono rank-number text-lg">#${rank}</span>
+                            <div class="w-10 h-10 bg-gray-800 rounded-full overflow-hidden ring-2 ring-red-600/30">
+                                <img src="${user.avatar_url}" alt="avatar" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <span class="font-semibold text-gray-100">${user.username}</span>
+                                <span class="text-gray-500 text-xs block">ID: ${user.user_id}</span>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                             <span class="text-red-400 text-sm font-bold">Lvl ${user.level}</span>
+                             <span class="text-gray-600 text-xs block">${formatNumber(user.xp)} XP</span>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        }
+
+        // Fonction de recherche
+        function filterLeaderboard(searchTerm) {
+            const container = document.getElementById('remaining-leaderboard');
+            const searchLower = searchTerm.toLowerCase().trim();
+            
+            if (searchLower === '') {
+                // Réaffiche le top 50 normal
+                displayRemaining(fullLeaderboard.slice(3, 50));
+                return;
+            }
+
+            // Filtre les résultats (top 3 non inclus dans la recherche)
+            const filtered = fullLeaderboard.slice(3).filter(user => 
+                user.username.toLowerCase().includes(searchLower) || 
+                user.user_id.toString().includes(searchLower)
+            );
+
+            container.innerHTML = '';
+            
+            if (filtered.length === 0) {
+                const noResults = getTranslation('leaderboard.no_results');
+                container.innerHTML = `<div class="p-4 text-center text-gray-500">${noResults} "${searchTerm}"</div>`;
+                return;
+            }
+
+            // Affiche les résultats avec le bon rang depuis le classement complet
+            filtered.forEach((user) => {
+                const rank = fullLeaderboard.indexOf(user) + 1;
+                
+                const html = `
+                    <div class="leaderboard-item p-4 rounded-lg flex items-center justify-between transition" data-username="${user.username.toLowerCase()}" data-user-id="${user.user_id}">
+                        <div class="flex items-center gap-4">
+                            <span class="text-red-500 font-mono rank-number text-lg">#${rank}</span>
+                            <div class="w-10 h-10 bg-gray-800 rounded-full overflow-hidden ring-2 ring-red-600/30">
+                                <img src="${user.avatar_url}" alt="avatar" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <span class="font-semibold text-gray-100">${user.username}</span>
+                                <span class="text-gray-500 text-xs block">ID: ${user.user_id}</span>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                             <span class="text-red-400 text-sm font-bold">Lvl ${user.level}</span>
+                             <span class="text-gray-600 text-xs block">${formatNumber(user.xp)} XP</span>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        }
+
+        // Charge le leaderboard au démarrage
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Page chargée, appel de loadLeaderboard()');
+            loadLeaderboard();
+            
+            // Ajoute l'écouteur pour la recherche
+            const searchInput = document.getElementById('search-input');
+            searchInput.addEventListener('input', (e) => {
+                filterLeaderboard(e.target.value);
+            });
+            
+            // Recharge toutes les 30 secondes
+            setInterval(loadLeaderboard, 30000);
+        });
+    </script>
+</body>
+</html>

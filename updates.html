@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Les Révélations - Mises à jour</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/jpeg" href="icon.jpg">
+    <script src="i18n.js"></script>
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif;
+            background-color: #0f0f0f;
+            background-image: radial-gradient(circle at 50% 50%, #2a0a0a 0%, #050505 100%);
+            background-attachment: fixed;
+            color: #e5e5e5; 
+        }
+        h1, h2, .cult-font { font-family: 'Cinzel', serif; }
+        /* Ligne rouge de la timeline */
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #7f1d1d;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <nav class="p-6 flex justify-between items-center max-w-7xl mx-auto w-full">
+        <a href="index.html" class="text-2xl font-bold text-red-600 tracking-wider flex items-center gap-2 hover:opacity-80 transition"> 
+            <i class="fa-solid fa-crown"></i> <span data-i18n="nav.logo">CULT BOT</span>
+        </a>
+        <div class="flex gap-6 text-sm font-semibold text-gray-400">
+            <a href="commands.html" class="hover:text-white transition" data-i18n="nav.rituals">Rituels</a> 
+            <a href="leaderboard.html" class="hover:text-white transition" data-i18n="nav.pantheon">Panthéon</a>
+            <a href="updates.html" class="hover:text-white transition font-bold text-red-600" data-i18n="nav.revelations">Révélations</a>
+        </div>
+        <div class="flex gap-4">
+            <button id="language-toggle" onclick="toggleLanguage()" class="bg-red-900/50 hover:bg-red-700 text-white px-4 py-2 rounded-full font-bold transition duration-300 border border-red-700">
+                🇫🇷 FR
+            </button>
+            <a href="https://discord.com/oauth2/authorize?client_id=1361740370605641840&permissions=8&response_type=code&redirect_uri=http%3A%2F%2Flocalhost&integration_type=0&scope=bot+applications.commands+dm_channels.read+activities.read" class="bg-red-700 hover:bg-red-600 text-white px-6 py-2 rounded-full font-bold transition duration-300 shadow-lg shadow-red-900/50" data-i18n="nav.invite">
+                Inviter le Bot
+            </a>
+        </div>
+    </nav>
+
+    <header class="text-center mb-16 px-4">
+        <h1 class="text-5xl font-black text-red-600 mb-4 cult-font uppercase" style="text-shadow: 0 0 20px rgba(220, 38, 38, 0.5), 0 0 40px rgba(220, 38, 38, 0.2);" data-i18n="updates.book_revelations">Le Livre des Révélations</h1>
+        <p class="text-gray-400" data-i18n="updates.sacred_history">L'histoire sacrée de l'évolution du Bot.</p>
+    </header>
+
+    <div class="max-w-4xl mx-auto px-4 pb-20 relative timeline">
+        
+        <div class="flex justify-between items-center w-full mb-12 relative">
+            <div class="w-5/12 text-right pr-8">
+                <div class="bg-neutral-900 border border-red-900/50 p-6 rounded-xl shadow-[0_0_15px_rgba(220,38,38,0.2)]">
+                    <span class="text-red-500 font-bold text-sm" data-i18n="updates.era_blood">v2.0 - L'Ère du Sang</span>
+                    <h3 class="text-xl font-bold text-white mb-2 mt-1" data-i18n="updates.xp_levels">Système XP & Niveaux</h3>
+                    <p class="text-gray-400 text-sm" data-i18n="updates.xp_desc">Ajout complet du système de niveaux. Les fidèles peuvent maintenant gagner de l'expérience en priant (chattant).</p>
+                </div>
+            </div>
+            <div class="absolute left-1/2 transform -translate-x-1/2 w-8 h-8 bg-red-600 rounded-full border-4 border-black z-10 flex items-center justify-center">
+                <i class="fa-solid fa-star text-black text-xs"></i>
+            </div>
+            <div class="w-5/12 pl-8">
+                <span class="text-gray-500 font-mono text-sm">07 Décembre 2025</span>
+            </div>
+        </div>
+
+        <div class="flex justify-between items-center w-full mb-12 flex-row-reverse relative">
+            <div class="w-5/12 text-left pl-8">
+                <div class="bg-neutral-900 border border-neutral-800 p-6 rounded-xl hover:border-red-900/30 transition">
+                    <span class="text-purple-500 font-bold text-sm" data-i18n="updates.joy_merriment">v1.5 - Joie & Allégresse</span>
+                    <h3 class="text-xl font-bold text-white mb-2 mt-1" data-i18n="updates.fun_commands">Commandes Fun</h3>
+                    <p class="text-gray-400 text-sm" data-i18n="updates.fun_desc">Introduction des commandes /hug, /kiss et du 8ball pour divertir le culte.</p>
+                </div>
+            </div>
+            <div class="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-neutral-700 rounded-full border-4 border-black z-10"></div>
+            <div class="w-5/12 text-right pr-8">
+                <span class="text-gray-500 font-mono text-sm">15 Novembre 2025</span>
+            </div>
+        </div>
+
+        <div class="flex justify-between items-center w-full mb-12 relative">
+            <div class="w-5/12 text-right pr-8">
+                <div class="bg-neutral-900 border border-neutral-800 p-6 rounded-xl hover:border-red-900/30 transition">
+                    <span class="text-blue-500 font-bold text-sm" data-i18n="updates.genesis">v1.0 - La Genèse</span>
+                    <h3 class="text-xl font-bold text-white mb-2 mt-1" data-i18n="updates.official_launch">Lancement Officiel</h3>
+                    <p class="text-gray-400 text-sm" data-i18n="updates.launch_desc">Naissance du bot. Commandes de modération de base et lecteur de musique opérationnel.</p>
+                </div>
+            </div>
+            <div class="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-neutral-700 rounded-full border-4 border-black z-10"></div>
+            <div class="w-5/12 pl-8">
+                <span class="text-gray-500 font-mono text-sm">01 Octobre 2025</span>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>    <footer class="mt-auto py-8 bg-black text-center text-gray-600 border-t border-red-900/20">
+        <p>Créé par le Spunnn © 2025</p>
+        <div class="mt-2 text-2xl flex justify-center gap-4">
+            <a href="https://discord.gg/ganEwXH3zg" class="hover:text-red-500 transition"><i class="fa-brands fa-discord"></i></a>
+            <a href="https://github.com/cnuddeMatteo" class="hover:text-red-500 transition"><i class="fa-brands fa-github"></i></a>
+        </div>
+    </footer>
